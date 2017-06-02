@@ -15,8 +15,8 @@ Thunk Kickoff wraps async actions with request status (`success`, `pending`, `fa
 
 ```js
 import kickoff from 'thunk-kickoff'
-import { myPromise } from 'api'
-import { store } from 'redux/store'
+import { myPromise } from 'some/api'
+import { store } from 'some/redux/store'
 
 const init = kickoff.state({
     // initialize
@@ -46,8 +46,8 @@ const data = kickoff.selectors.getData(state)
 
 ```ts
 import kickoff from 'thunk-kickoff'
-import { myPromise, ResponseType } from 'api'
-import { store } from 'redux/store'
+import { myPromise, ResponseType } from 'some/api'
+import { store } from 'some/redux/store'
 
 type State = kickoff.State<ResponseType>
 
