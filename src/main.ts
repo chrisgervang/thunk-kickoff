@@ -3,10 +3,6 @@ import { ThunkAction } from 'redux-thunk'
 
 export type Status = 'pending' | 'success' | 'fail'
 
-export interface Request {
-    
-}
-
 export interface Store<T> {
     data: T
     status: Status
@@ -48,7 +44,7 @@ interface ActionCreatorOptions<R, State, Format = R> {
   format: (data: R) => Format
 }
 
-export function load<State, R, Format = R, S extends string = string>(type: S, endpoint: Promise<R>, options?: Partial<ActionCreatorOptions<R, State, Format>>) {  
+export function kickoff<State, R, Format = R, S extends string = string>(type: S, endpoint: Promise<R>, options?: Partial<ActionCreatorOptions<R, State, Format>>) {  
   const defaultActionCreatorOptions: Partial<ActionCreatorOptions<R, State>> = {
     defaultResponse: undefined,
     format: data => data
@@ -89,22 +85,30 @@ export function reducer<T>(state: Store<T>, action: Action<T>, options: Partial<
   }
 }
 
-export function getRequest<Format>(state: Store<Format>) {
+function getRequest<Format>(state: Store<Format>) {
   return { status: state.status, error: state.error }
 }
 
-export function getStatus<Format>(state: Store<Format>) {
+function getStatus<Format>(state: Store<Format>) {
   return state.status
 }
 
-export function isSuccess<Format>(state: Store<Format>) {
+function isSuccess<Format>(state: Store<Format>) {
   return state.status === "success"
 }
 
-export function isFail<Format>(state: Store<Format>) {
+function isFail<Format>(state: Store<Format>) {
   return { failed: state.status === "fail", why: state.error }
 }
 
-export function isPending<Format>(state: Store<Format>) {
+function isPending<Format>(state: Store<Format>) {
   return state.status === "pending"
+}
+
+export const selectors = {
+  getRequest,
+  getStatus,
+  isSuccess,
+  isFail,
+  isPending
 }

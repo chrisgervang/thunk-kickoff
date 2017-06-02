@@ -1,7 +1,7 @@
 # thunk-kickoff
 ### The easiest way to get promises out the door and into your store!
 
-thunk-kickoff is a set of functions that take care of everything you should do when calling an async promise and loading the result into your redux store. It's not another redux middleware because it doesn't have to be. Instead, it builds on top of redux-thunk, a redux middleware that adds support for action creators that return a function instead of an action. Lets see a basic usage...
+thunk-kickoff is a set of functions that take care of everything you should do when calling an async promise and loading the result into your redux store. It's not another redux middleware because it doesn't have to be. Instead, it builds on top of redux-thunk. Lets see a basic usage...
 
 ## Basic Usage
 
@@ -26,7 +26,7 @@ const store = {
 const LOAD_XKCD = "comics_xkcd_load"
 
 const actions = {
-    loadXkcd: () => tk.load(LOAD_XKCD, promise(), {
+    loadXkcd: () => tk.kickoff(LOAD_XKCD, promise(), {
         // format the data to whatever you'd like
         format: data => ({
             safeTitle: data.safe_title,
@@ -104,7 +104,7 @@ interface ActionCreators {
 }
 
 const actions: ActionCreators = {
-    loadXkcd: () => tk.load<Store, XkcdResponse, Xkcd>("comics_xkcd_load", promise(), {
+    loadXkcd: () => tk.kickoff<Store, XkcdResponse, Xkcd>("comics_xkcd_load", promise(), {
         // format the data to whatever you'd like
         format: data => ({
             safeTitle: data.safe_title,
