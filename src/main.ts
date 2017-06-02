@@ -3,21 +3,47 @@ import { ThunkAction } from 'redux-thunk'
 
 export type Status = 'pending' | 'success' | 'fail'
 
+/** kickoff state to store data and request status */
 export interface State<T> {
     data: T
     status: Status
     error?: string
 }
 
+export interface ReducerOptions {
+  /** decide which statuses update the data object in the reducer. default: ['success'] */
+  changeDataOn: Status[]
+}
+
+/** kickoff action to dispatch promise results */
+export interface Action<T> extends Redux.Action {
+    type: string
+    data: T
+    status: Status
+    error?: string
+}
+
+export type ActionCreatorCallback<Format, State> = (dispatch: Redux.Dispatch<State>, getState: () => State, data: Format) => void
+
+export interface ActionCreatorOptions<R, State, Format = R> {
+  /** continue the thunk on success to chain actions that depend on a success */
+  onSuccess: ActionCreatorCallback<Format, State>
+  /** continue the thunk on pening to chain actions that depend on a pending */
+  onPending: ActionCreatorCallback<Format, State>
+  /** continue the thunk on fail to chain actions that respond to a fail */
+  onFail: ActionCreatorCallback<Format, State>
+  /** optional default response data that will be inserted in the store when changeDataOn contains 'pending' or 'fail' */
+  defaultResponse: R
+  /** convert the response object into your prefered object */
+  format: (data: R) => Format
+}
+
+/** state object initializer */
 export function state<T> (data: T): State<T> {
     return {
         status: "pending",
         data
     }
-}
-
-export interface ReducerOptions {
-  changeDataOn: Status[]
 }
 
 const defaultReducerOptions: Partial<ReducerOptions> = {
@@ -32,29 +58,16 @@ export function reducer<T>(state: State<T>, action: Action<T>, options: Partial<
   }
 }
 
-export interface Action<T> extends Redux.Action {
-    type: string
-    status: Status
-    error?: string
-    data: T
-}
-
-export type ActionCreatorCallback<Format, State> = (dispatch: Redux.Dispatch<State>, getState: () => State, data: Format) => void
-
-export interface ActionCreatorOptions<R, State, Format = R> {
-  onSuccess: ActionCreatorCallback<Format, State>
-  onPending: ActionCreatorCallback<Format, State>
-  onFail: ActionCreatorCallback<Format, State>
-  defaultResponse: R
-  format: (data: R) => Format
-}
-
 function getRequest<Format>(state: State<Format>) {
   return { status: state.status, error: state.error }
 }
 
 function getStatus<Format>(state: State<Format>) {
   return state.status
+}
+
+function getData<Format>(state: State<Format>) {
+  return state.data
 }
 
 function isSuccess<Format>(state: State<Format>) {
@@ -69,9 +82,11 @@ function isPending<Format>(state: State<Format>) {
   return state.status === "pending"
 }
 
+/** basic helper functions to pull out of the kickoff store */
 export const selectors = {
   getRequest,
   getStatus,
+  getData,
   isSuccess,
   isFail,
   isPending
@@ -79,6 +94,7 @@ export const selectors = {
 
 export type WrapCreator<State> = (dispatch: Redux.Dispatch<State>, getState: () => State) => void
 
+/** redux-thunk wrapper for calling an async function */
 export function wrap<State> (creator: WrapCreator<State>): ThunkAction<void, State, null> {
   return (dispatch, getState) => {
     /** define and then call an async function */
@@ -88,6 +104,7 @@ export function wrap<State> (creator: WrapCreator<State>): ThunkAction<void, Sta
   }
 }
 
+/** action creator for kicking off a promise and loading it into the store */
 export default function kickoff<State, R, Format = R, S extends string = string>(type: S, endpoint: Promise<R>, options?: Partial<ActionCreatorOptions<R, State, Format>>) {  
   const defaultActionCreatorOptions: Partial<ActionCreatorOptions<R, State>> = {
     defaultResponse: undefined,

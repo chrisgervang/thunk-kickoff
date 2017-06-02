@@ -1,6 +1,6 @@
 {
   "name": "thunk-kickoff",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Kickoff promises with type safety and ease!",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",

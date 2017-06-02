@@ -43,6 +43,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/** state object initializer */
 function state(data) {
     return {
         status: "pending",
@@ -69,6 +70,9 @@ function getRequest(state) {
 function getStatus(state) {
     return state.status;
 }
+function getData(state) {
+    return state.data;
+}
 function isSuccess(state) {
     return state.status === "success";
 }
@@ -78,13 +82,16 @@ function isFail(state) {
 function isPending(state) {
     return state.status === "pending";
 }
+/** basic helper functions to pull out of the kickoff store */
 exports.selectors = {
     getRequest: getRequest,
     getStatus: getStatus,
+    getData: getData,
     isSuccess: isSuccess,
     isFail: isFail,
     isPending: isPending
 };
+/** redux-thunk wrapper for calling an async function */
 function wrap(creator) {
     var _this = this;
     return function (dispatch, getState) {
@@ -102,6 +109,7 @@ function wrap(creator) {
     };
 }
 exports.wrap = wrap;
+/** action creator for kicking off a promise and loading it into the store */
 function kickoff(type, endpoint, options) {
     var _this = this;
     var defaultActionCreatorOptions = {
