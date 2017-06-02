@@ -144,5 +144,6 @@ function kickoff(type, endpoint, options) {
         });
     }); });
 }
+exports.kickoff = kickoff;
 exports.default = kickoff;
 //# sourceMappingURL=main.js.map

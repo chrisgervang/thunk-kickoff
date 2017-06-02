@@ -105,7 +105,7 @@ export function wrap<State> (creator: WrapCreator<State>): ThunkAction<void, Sta
 }
 
 /** action creator for kicking off a promise and loading it into the store */
-export default function kickoff<State, R, Format = R, S extends string = string>(type: S, endpoint: Promise<R>, options?: Partial<ActionCreatorOptions<R, State, Format>>) {  
+export function kickoff<State, R, Format = R, S extends string = string>(type: S, endpoint: Promise<R>, options?: Partial<ActionCreatorOptions<R, State, Format>>) {  
   const defaultActionCreatorOptions: Partial<ActionCreatorOptions<R, State>> = {
     defaultResponse: undefined,
     format: data => data
@@ -129,3 +129,5 @@ export default function kickoff<State, R, Format = R, S extends string = string>
     })
   })
 }
+
+export default kickoff

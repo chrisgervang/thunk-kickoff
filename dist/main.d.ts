@@ -53,4 +53,5 @@ export declare type WrapCreator<State> = (dispatch: Redux.Dispatch<State>, getSt
 /** redux-thunk wrapper for calling an async function */
 export declare function wrap<State>(creator: WrapCreator<State>): ThunkAction<void, State, null>;
 /** action creator for kicking off a promise and loading it into the store */
-export default function kickoff<State, R, Format = R, S extends string = string>(type: S, endpoint: Promise<R>, options?: Partial<ActionCreatorOptions<R, State, Format>>): ThunkAction<void, State, null>;
+export declare function kickoff<State, R, Format = R, S extends string = string>(type: S, endpoint: Promise<R>, options?: Partial<ActionCreatorOptions<R, State, Format>>): ThunkAction<void, State, null>;
+export default kickoff;
