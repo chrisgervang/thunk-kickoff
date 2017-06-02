@@ -25,7 +25,7 @@ const init = kickoff.state({
 // action
 const LOAD = "load"
 
-const thunkAction = () => kickoff.kickoff(LOAD, myPromise())
+const thunkAction = () => kickoff(LOAD, myPromise())
 
 // ... for this to work you need to reduce the action onto the store
 
@@ -51,7 +51,7 @@ import { store } from 'redux/store'
 
 type State = kickoff.State<ResponseType>
 
-const init = kickoff.state({
+const init: State = kickoff.state({
     // initialize
 }),
 
@@ -64,7 +64,7 @@ const thunkAction = () => kickoff<State, ResponseType>("load", myPromise())
 
 // ... for this to work you need to reduce the action onto the store
 
-const reducer = (state = init, action) => kickoff.reducer(state, action)
+const reducer = (state: State = init, action) => kickoff.reducer(state, action)
 
 // ... to load the promise
 
@@ -159,7 +159,7 @@ interface State {
     // dinosaurComics: ...
 }
 
-const init = {
+const init: State = {
     xkcd: kickoff.state({
         safeTitle: "",
         image: "",
@@ -189,7 +189,7 @@ const actions: ActionCreators = {
     })
 }
 
-const reducer = (state = init, action) => {
+const reducer = (state: State = init, action) => {
     if(action.type === "comics_xkcd_load") {
         return {...state, xkcd: kickoff.reducer(state.xkcd, action)}
     }
