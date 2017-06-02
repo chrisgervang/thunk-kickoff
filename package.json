@@ -1,3 +1,38 @@
 {
-
+  "name": "thunk-kickoff",
+  "version": "1.0.0",
+  "description": "Kickoff promises with type safety and ease!",
+  "main": "./dist/main.js",
+  "types": "./dist/main.d.ts",
+  "scripts": {
+    "build": "tsc -p ./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrisgervang/thunk-kickoff.git"
+  },
+  "keywords": [
+    "promises",
+    "redux-thunk",
+    "redux",
+    "typescript",
+    "action",
+    "selector",
+    "reducer",
+    "async"
+  ],
+  "author": "Chris Gervang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chrisgervang/thunk-kickoff/issues"
+  },
+  "homepage": "https://github.com/chrisgervang/thunk-kickoff#readme",
+  "dependencies": {
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^2.3.4"
+  }
 }
