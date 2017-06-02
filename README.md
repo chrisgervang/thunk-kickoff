@@ -7,18 +7,86 @@ npm install --save thunk-kickoff
 
 ## Motivation
 
-Thunk Kickoff is a utility to decrate async actions with request status, and to reduce boiler plate when working with promises in redux. It's not another middleware because it doesn't have to be. Instead, it builds on top of redux-thunk. Lets see a basic usage...
+Thunk Kickoff wraps async actions with request status (`success`, `pending`, `fail`), and provides essential request lifecycle functions. It builds on top of redux-thunk. Lets see a basic usage...
 
 ## Basic Usage
 
+### JavaScript
+
 ```js
-import tk from 'thunk-kickoff'
+import kickoff from 'thunk-kickoff'
+import { myPromise } from 'api'
+import { store } from 'redux/store'
+
+const init = kickoff.state({
+    // initialize
+}),
+
+// action
+const LOAD = "load"
+
+const thunkAction = () => kickoff.kickoff(LOAD, myPromise())
+
+// ... for this to work you need to reduce the action onto the store
+
+const reducer = (state = init, action) => kickoff.reducer(state, action)
+
+// ... to load the promise
+
+store.dispatch(thunkAction())
+
+// ... to check status and get data
+
+const state = store.getState()
+const status = kickoff.selectors.getStatus(state)
+const data = kickoff.selectors.getData(state)
+```
+
+### TypeScript
+
+```ts
+import kickoff from 'thunk-kickoff'
+import { myPromise, ResponseType } from 'api'
+import { store } from 'redux/store'
+
+type State = kickoff.State<ResponseType>
+
+const init = kickoff.state({
+    // initialize
+}),
+
+// action
+interface Load extends kickoff.Action<ResponseType> { 
+    type: "load"
+}
+
+const thunkAction = () => kickoff<State, ResponseType>("load", myPromise())
+
+// ... for this to work you need to reduce the action onto the store
+
+const reducer = (state = init, action) => kickoff.reducer(state, action)
+
+// ... to load the promise
+
+store.dispatch(thunkAction())
+
+// ... to check status and get data
+
+const state = store.getState()
+const status = kickoff.selectors.getStatus(state)
+const data = kickoff.selectors.getData(state)
+```
+
+## Full Example
+
+```js
+import kickoff from 'thunk-kickoff'
 
 // I've got a promise, and I'd like to load it into the store.
 const promise = () => fetch("https://xkcd.com/info.0.json", { method: "GET" }).then(r => r.json())
 
-const store = {
-    xkcd: loadStore({
+const init = {
+    xkcd: kickoff.state({
         safeTitle: "",
         image: "",
         date: new Date(),
@@ -32,7 +100,7 @@ const store = {
 const LOAD_XKCD = "comics_xkcd_load"
 
 const actions = {
-    loadXkcd: () => tk.kickoff(LOAD_XKCD, promise(), {
+    loadXkcd: () => kickoff(LOAD_XKCD, promise(), {
         // format the data to whatever you'd like
         format: data => ({
             safeTitle: data.safe_title,
@@ -43,23 +111,23 @@ const actions = {
     })
 }
 
-const reducer = (state = store, action) => {
-    if(LOAD_XKCD) {
-        return {...state, xkcd: tk.reducer(state.xkcd, action)}
+const reducer = (state = init, action) => {
+    if(action.type === LOAD_XKCD) {
+        return {...state, xkcd: kickoff.reducer(state.xkcd, action)}
     }
     return state
 }
 
 const selectors = {
-    isXkcdLoaded: state => tk.selectors.isSuccess(state.xkcd),
-    getXkcdData: state => tk.selectors.getData(state.xkcd)
+    isXkcdLoaded: state => kickoff.selectors.isSuccess(state.xkcd),
+    getXkcdData: state => kickoff.selectors.getData(state.xkcd)
 }
 ```
 
 But I thought you said type safety?
 
 ```ts
-import * as tk from 'thunk-kickoff'
+import * as kickoff from 'thunk-kickoff'
 
 interface XkcdResponse {
     month: string
@@ -85,14 +153,14 @@ interface Xkcd {
     issue: number
 }
 
-interface Store {
-    xkcd: tk.Store<Xkcd>
+interface State {
+    xkcd: kickoff.State<Xkcd>
     // oatmeal: ...
     // dinosaurComics: ...
 }
 
-const store = {
-    xkcd: loadStore({
+const init = {
+    xkcd: kickoff.state({
         safeTitle: "",
         image: "",
         date: new Date(),
@@ -101,7 +169,7 @@ const store = {
 }
 
 // define a redux action type
-interface LoadXkcd extends tk.LoadAction<Xkcd> { 
+interface LoadXkcd extends kickoff.Action<Xkcd> { 
     type: "comics_xkcd_load"
 }
 
@@ -110,7 +178,7 @@ interface ActionCreators {
 }
 
 const actions: ActionCreators = {
-    loadXkcd: () => tk.kickoff<Store, XkcdResponse, Xkcd>("comics_xkcd_load", promise(), {
+    loadXkcd: () => kickoff<State, XkcdResponse, Xkcd>("comics_xkcd_load", promise(), {
         // format the data to whatever you'd like
         format: data => ({
             safeTitle: data.safe_title,
@@ -121,20 +189,15 @@ const actions: ActionCreators = {
     })
 }
 
-const reducer = (state = store, action) => {
-    if("comics_xkcd_load") {
-        return {...state, xkcd: tk.reducer(state.xkcd, action)}
+const reducer = (state = init, action) => {
+    if(action.type === "comics_xkcd_load") {
+        return {...state, xkcd: kickoff.reducer(state.xkcd, action)}
     }
     return state
 }
 
-interface Selectors {
-    isXkcdLoaded: (state: Store) => boolean
-    getXkcdData: (state: Store) => Xkcd
-}
-
-const selectors: Selectors = {
-    isXkcdLoaded: state => tk.selectors.isSuccess(state.xkcd),
-    getXkcdData: state => tk.selectors.getData(state.xkcd)
+const selectors = {
+    isXkcdLoaded: (state: Store) => kickoff.selectors.isSuccess(state.xkcd),
+    getXkcdData: (state: Store) => kickoff.selectors.getData(state.xkcd)
 }
 ```
