@@ -1,7 +1,13 @@
 # thunk-kickoff
-### The easiest way to get promises out the door and into your store!
+### Get promises out the door and into your store!
 
-thunk-kickoff is a set of functions that take care of everything you should do when calling an async promise and loading the result into your redux store. It's not another redux middleware because it doesn't have to be. Instead, it builds on top of redux-thunk. Lets see a basic usage...
+```
+npm install --save thunk-kickoff
+```
+
+## Motivation
+
+Thunk Kickoff is a utility to decrate async actions with request status, and to reduce boiler plate when working with promises in redux. It's not another middleware because it doesn't have to be. Instead, it builds on top of redux-thunk. Lets see a basic usage...
 
 ## Basic Usage
 
