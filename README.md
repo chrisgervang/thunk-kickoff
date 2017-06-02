@@ -7,7 +7,7 @@ npm install --save thunk-kickoff
 
 ## Motivation
 
-Thunk Kickoff wraps async actions with request status (`success`, `pending`, `fail`), and provides essential request lifecycle functions. It builds on top of redux-thunk. Lets see a basic usage...
+Thunk Kickoff wraps async actions with request status (`success`, `pending`, `fail`), and provides essential request lifecycle functions. It builds on top of redux-thunk.
 
 ## Basic Usage
 
