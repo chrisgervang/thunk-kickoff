@@ -106,12 +106,13 @@ export function wrap<State> (creator: WrapCreator<State>): ThunkAction<void, Sta
 
 /** action creator for kicking off a promise and loading it into the store */
 export function kickoff<State, R, Format = R, S extends string = string>(type: S, endpoint: Promise<R>, options?: Partial<ActionCreatorOptions<R, State, Format>>) {  
-  const defaultActionCreatorOptions: Partial<ActionCreatorOptions<R, State>> = {
+  const defaultOptions: Partial<ActionCreatorOptions<R, State>> = {
     defaultResponse: undefined,
     format: data => data
   }
 
-  if(!options) options = defaultActionCreatorOptions as any
+  if(!options) options = defaultOptions as any
+  if(!options.format) options.format = defaultOptions.format as any
 
   return wrap<State>(async (dispatch, getState) => {
     const data = !!options.defaultResponse ? options.format(options.defaultResponse) : null 
@@ -121,7 +122,6 @@ export function kickoff<State, R, Format = R, S extends string = string>(type: S
     await endpoint.then( data => {
       dispatch<Action<Format>>({ type, status: "success", data: options.format(data) })
       if(!!options.onSuccess) options.onSuccess(dispatch, getState, options.format(data))
-
     }, why => {
       dispatch<Action<Format>>({type, status: "fail", error: why, data})
       if(!!options.onFail) options.onFail(dispatch, getState, data)

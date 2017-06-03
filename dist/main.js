@@ -112,12 +112,14 @@ exports.wrap = wrap;
 /** action creator for kicking off a promise and loading it into the store */
 function kickoff(type, endpoint, options) {
     var _this = this;
-    var defaultActionCreatorOptions = {
+    var defaultOptions = {
         defaultResponse: undefined,
         format: function (data) { return data; }
     };
     if (!options)
-        options = defaultActionCreatorOptions;
+        options = defaultOptions;
+    if (!options.format)
+        options.format = defaultOptions.format;
     return wrap(function (dispatch, getState) { return __awaiter(_this, void 0, void 0, function () {
         var data;
         return __generator(this, function (_a) {
