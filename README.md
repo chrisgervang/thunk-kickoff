@@ -1,7 +1,7 @@
 # thunk-kickoff
 ### Get promises out the door and into your store!
 
-Thunk Kickoff ensures each async thunk dispatches actions for request status changes (`success`, `pending`, `fail`), and provides essential request lifecycle functions. It builds on top of redux-thunk.
+Thunk Kickoff enables you to use promises (or any `async`) with redux-thunk. It ensures each async thunk dispatches actions for request status changes (`success`, `pending`, `fail`), and provides essential request lifecycle functions. It builds on top of redux-thunk.
 
 ```
 npm install --save thunk-kickoff
