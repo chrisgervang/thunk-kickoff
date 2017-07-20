@@ -1,13 +1,7 @@
 # thunk-kickoff
 ### Get promises out the door and into your store!
-Use thunk-kickoff to expose the request status for all asynchronous data in your store. A must-have if you're building user interfaces with redux-thunk, connected react components, and api endpoints. I primarily use this to simply loading indicator and error interface implementations, as well as ensuring the program logs are rich with meaningful redux actions for debugging purposes.
 
-## Features
-
-- Easily dispatch more actions in response to status changes.
-- Reformat the response json before its added to the store.
-- Fine tune performance by controlling which status changes cause a dispatch.
-- Significantly reduce boiler plate in reducer, action creator, selector, and store definitions. 
+Thunk Kickoff ensures each async thunk dispatches actions for request status changes (`success`, `pending`, `fail`), and provides essential request lifecycle functions. It builds on top of redux-thunk.
 
 ```
 npm install --save thunk-kickoff
@@ -15,7 +9,14 @@ npm install --save thunk-kickoff
 
 ## Motivation
 
-Thunk Kickoff wraps async actions with request status (`success`, `pending`, `fail`), and provides essential request lifecycle functions. It builds on top of redux-thunk.
+Use thunk-kickoff to expose the request status for all asynchronous data in your store. A must-have if you're building user interfaces with redux-thunk, connected react components, and api endpoints. I primarily use this to simplify loading indicator and error interface implementations, as well as ensure the debugging logs are rich with meaningful redux actions.
+
+## Features
+
+- Easily dispatch more actions in response to status changes.
+- Reformat the response json before its added to the store.
+- Fine tune performance by controlling which status changes cause a dispatch.
+- Significantly reduce boiler plate in reducer, action creator, selector, and store definitions. 
 
 ## API Reference
 
