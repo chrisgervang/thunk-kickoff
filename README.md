@@ -7,7 +7,7 @@ Use thunk-kickoff to expose the request status for all asynchronous data in your
 - Easily dispatch more actions in response to status changes.
 - Reformat the response json before its added to the store.
 - Fine tune performance by controlling which status changes cause a dispatch.
-- Significantly reduces boiler plate in your reducer, action creator, selector, and store definition. 
+- Significantly reduce boiler plate in reducer, action creator, selector, and store definitions. 
 
 ```
 npm install --save thunk-kickoff
