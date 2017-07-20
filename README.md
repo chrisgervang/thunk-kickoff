@@ -18,7 +18,7 @@ Thunk Kickoff wraps async actions with request status (`success`, `pending`, `fa
 ### JavaScript
 
 ```js
-import kickoff from 'thunk-kickoff'
+import ko from 'thunk-kickoff'
 import { myPromise } from 'some/api'
 import { store } from 'some/redux/store'
 
@@ -29,68 +29,68 @@ const init = kickoff.state({
 // action
 const LOAD = "load"
 
-const thunkAction = () => kickoff(LOAD, myPromise())
+const thunkAction = () => ko.kickoff(LOAD, myPromise())
 
 // ... for this to work you need to reduce the action onto the store
 
-const reducer = (state = init, action) => kickoff.reducer(state, action)
+const reducer = (state = init, action) => ko.reducer(state, action)
 
-// ... to load the promise
+// load the promise
 
 store.dispatch(thunkAction())
 
-// ... to check status and get data
+// check status and get data
 
 const state = store.getState()
-const status = kickoff.selectors.getStatus(state)
-const data = kickoff.selectors.getData(state)
+const status = ko.selectors.getStatus(state)
+const data = ko.selectors.getData(state)
 ```
 
 ### TypeScript
 
 ```ts
-import kickoff from 'thunk-kickoff'
+import * as ko from 'thunk-kickoff'
 import { myPromise, ResponseType } from 'some/api'
 import { store } from 'some/redux/store'
 
-type State = kickoff.State<ResponseType>
+type State = ko.State<ResponseType>
 
-const init: State = kickoff.state({
+const init: State = ko.state({
     // initialize
 }),
 
 // action
-interface Load extends kickoff.Action<ResponseType> { 
+interface Load extends ko.Action<ResponseType> { 
     type: "load"
 }
 
-const thunkAction = () => kickoff<State, ResponseType>("load", myPromise())
+const thunkAction = () => ko.kickoff<State, ResponseType>("load", myPromise())
 
-// ... for this to work you need to reduce the action onto the store
+// for this to work you need to reduce the action onto the store
 
-const reducer = (state: State = init, action) => kickoff.reducer(state, action)
+const reducer = (state: State = init, action) => ko.reducer(state, action)
 
-// ... to load the promise
+// load the promise
 
 store.dispatch(thunkAction())
 
-// ... to check status and get data
+// check status and get data
 
 const state = store.getState()
-const status = kickoff.selectors.getStatus(state)
-const data = kickoff.selectors.getData(state)
+const status = ko.selectors.getStatus(state)
+const data = ko.selectors.getData(state)
 ```
 
 ## Full Example
 
 ```js
-import kickoff from 'thunk-kickoff'
+import ko from 'thunk-kickoff'
 
 // I've got a promise, and I'd like to load it into the store.
 const promise = () => fetch("https://xkcd.com/info.0.json", { method: "GET" }).then(r => r.json())
 
 const init = {
-    xkcd: kickoff.state({
+    xkcd: ko.state({
         safeTitle: "",
         image: "",
         date: new Date(),
@@ -104,7 +104,7 @@ const init = {
 const LOAD_XKCD = "comics_xkcd_load"
 
 const actions = {
-    loadXkcd: () => kickoff(LOAD_XKCD, promise(), {
+    loadXkcd: () => ko.kickoff(LOAD_XKCD, promise(), {
         // format the data to whatever you'd like
         format: data => ({
             safeTitle: data.safe_title,
@@ -117,21 +117,21 @@ const actions = {
 
 const reducer = (state = init, action) => {
     if(action.type === LOAD_XKCD) {
-        return {...state, xkcd: kickoff.reducer(state.xkcd, action)}
+        return {...state, xkcd: ko.reducer(state.xkcd, action)}
     }
     return state
 }
 
 const selectors = {
-    isXkcdLoaded: state => kickoff.selectors.isSuccess(state.xkcd),
-    getXkcdData: state => kickoff.selectors.getData(state.xkcd)
+    isXkcdLoaded: state => ko.selectors.isSuccess(state.xkcd),
+    getXkcdData: state => ko.selectors.getData(state.xkcd)
 }
 ```
 
-But I thought you said type safety?
+But I thought you said type safety? Typescript Example:
 
 ```ts
-import * as kickoff from 'thunk-kickoff'
+import * as ko from 'thunk-kickoff'
 
 interface XkcdResponse {
     month: string
@@ -158,13 +158,13 @@ interface Xkcd {
 }
 
 interface State {
-    xkcd: kickoff.State<Xkcd>
+    xkcd: ko.State<Xkcd>
     // oatmeal: ...
     // dinosaurComics: ...
 }
 
 const init: State = {
-    xkcd: kickoff.state({
+    xkcd: ko.state({
         safeTitle: "",
         image: "",
         date: new Date(),
@@ -173,7 +173,7 @@ const init: State = {
 }
 
 // define a redux action type
-interface LoadXkcd extends kickoff.Action<Xkcd> { 
+interface LoadXkcd extends ko.Action<Xkcd> { 
     type: "comics_xkcd_load"
 }
 
@@ -182,7 +182,7 @@ interface ActionCreators {
 }
 
 const actions: ActionCreators = {
-    loadXkcd: () => kickoff<State, XkcdResponse, Xkcd>("comics_xkcd_load", promise(), {
+    loadXkcd: () => ko.kickoff<State, XkcdResponse, Xkcd>("comics_xkcd_load", promise(), {
         // format the data to whatever you'd like
         format: data => ({
             safeTitle: data.safe_title,
@@ -195,13 +195,13 @@ const actions: ActionCreators = {
 
 const reducer = (state: State = init, action) => {
     if(action.type === "comics_xkcd_load") {
-        return {...state, xkcd: kickoff.reducer(state.xkcd, action)}
+        return {...state, xkcd: ko.reducer(state.xkcd, action)}
     }
     return state
 }
 
 const selectors = {
-    isXkcdLoaded: (state: Store) => kickoff.selectors.isSuccess(state.xkcd),
-    getXkcdData: (state: Store) => kickoff.selectors.getData(state.xkcd)
+    isXkcdLoaded: (state: Store) => ko.selectors.isSuccess(state.xkcd),
+    getXkcdData: (state: Store) => ko.selectors.getData(state.xkcd)
 }
 ```
