@@ -31,7 +31,7 @@ import ko from 'thunk-kickoff'
 import { myPromise } from 'some/api'
 import { store } from 'some/redux/store'
 
-const init = kickoff.state({
+const init = ko.state({
     // initialize
 }),
 
@@ -40,7 +40,7 @@ const LOAD = "load"
 
 const thunkAction = () => ko.kickoff(LOAD, myPromise())
 
-// ... for this to work you need to reduce the action onto the store
+// for this to work you need to reduce the action onto the store
 
 const reducer = (state = init, action) => ko.reducer(state, action)
 
