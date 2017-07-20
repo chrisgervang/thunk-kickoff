@@ -1,6 +1,6 @@
 # thunk-kickoff
 ### Get promises out the door and into your store!
-Use thunk-kickoff to keep your store in sync with the request status for all asynchronous data in your store. 
+Use thunk-kickoff to expose the request status for all asynchronous data in your store. A must-have if you're building user interfaces with redux-thunk, connected react components, and api endpoints. I primarily use this to simply loading indicator and error interface implementations, as well as ensuring the program logs are rich with meaningful redux actions for debugging purposes.
 
 ## Features
 
