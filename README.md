@@ -9,7 +9,7 @@ npm install --save thunk-kickoff
 
 ## Motivation
 
-Use thunk-kickoff to expose the request status for all asynchronous data in your store. A must-have if you're building user interfaces with redux-thunk, connected react components, and api endpoints. I primarily use this to simplify loading indicator and error interface implementations, as well as ensure the debugging logs are rich with meaningful redux actions.
+Use thunk-kickoff to expose the request status for all asynchronous data in your store, and ensure the debugging logs are rich with meaningful redux actions. A must-have if you're building user interfaces with redux-thunk, connected react components, and api endpoints. Also, there was no easy way to make loading indicators and error notifications for every endpoint.
 
 ## Features
 
@@ -35,21 +35,19 @@ const init = ko.state({
     // initialize
 }),
 
-// action
+// Thunk Kickoff Action
 const LOAD = "load"
 
+// Thunk Kickoff Action Creator
 const thunkAction = () => ko.kickoff(LOAD, myPromise())
 
-// for this to work you need to reduce the action onto the store
-
+// define a reducer using ko.reducer, a function that handles store updates
 const reducer = (state = init, action) => ko.reducer(state, action)
 
 // load the promise
-
 store.dispatch(thunkAction())
 
 // check status and get data
-
 const state = store.getState()
 const status = ko.selectors.getStatus(state)
 const data = ko.selectors.getData(state)
@@ -68,23 +66,21 @@ const init: State = ko.state({
     // initialize
 }),
 
-// action
+// Thunk Kickoff Action
 interface Load extends ko.Action<ResponseType> { 
     type: "load"
 }
 
+// Thunk Kickoff Action Creator
 const thunkAction = () => ko.kickoff<State, ResponseType>("load", myPromise())
 
-// for this to work you need to reduce the action onto the store
-
+// define a reducer using ko.reducer, a function that handles store updates
 const reducer = (state: State = init, action) => ko.reducer(state, action)
 
 // load the promise
-
 store.dispatch(thunkAction())
 
 // check status and get data
-
 const state = store.getState()
 const status = ko.selectors.getStatus(state)
 const data = ko.selectors.getData(state)
@@ -109,7 +105,7 @@ const init = {
     // dinosaurComics: ...
 }
 
-// define a redux action type
+// define a Thunk Kickoff action
 const LOAD_XKCD = "comics_xkcd_load"
 
 const actions = {
@@ -181,7 +177,7 @@ const init: State = {
     }),
 }
 
-// define a redux action type
+// define a Thunk Kickoff action
 interface LoadXkcd extends ko.Action<Xkcd> { 
     type: "comics_xkcd_load"
 }
