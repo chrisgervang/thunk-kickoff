@@ -9,7 +9,7 @@ npm install --save thunk-kickoff
 
 ## Motivation
 
-Use thunk-kickoff to expose the request status for all asynchronous data in your store, and ensure the debugging logs are rich with meaningful redux actions. A must-have if you're building user interfaces with redux-thunk, connected react components, and api endpoints. Also, there was no easy way to make loading indicators and error notifications for every endpoint.
+I made this so that I can spend more time enriching my user’s experience, and less time setting up redux. Loading indicators and error toasters are now easy to make for every endpoint. Also, my debugging logs are now rich with meaningful redux actions. You may find this useful too if your frontend is built with redux-thunk, connected react components, and api endpoints.
 
 ## Features
 
